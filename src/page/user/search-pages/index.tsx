@@ -53,15 +53,19 @@ export default function SearchPages() {
   //   fetchJobs();
   // };
 
-  // Initial search based on URL params
+  // Initial fetch jobs dan search berdasarkan URL params
   useEffect(() => {
     if (searchParams.get('search') || searchParams.get('location')) {
+      // Jika ada parameter search, gunakan itu
       fetchJobs({
         title: searchParams.get('search') || undefined,
         location: searchParams.get('location') || undefined
       });
+    } else {
+      // Jika tidak ada parameter search, fetch semua jobs
+      fetchJobs();
     }
-  }, []);
+  }, []); // Jalankan sekali saat mount
 
   return (
     <MainLayout>

@@ -24,10 +24,11 @@ export function useJobs() {
   const fetchJobs = async (filters?: JobFilters) => {
     try {
       setLoading(true)
+      console.log('Fetching jobs with filters:', filters)
+
       let query = supabase
         .from('jobs')
         .select('*')
-        .order('created_at', { ascending: false })
 
       if (filters?.title) {
         query = query.ilike('title', `%${filters.title}%`)
@@ -36,9 +37,16 @@ export function useJobs() {
         query = query.ilike('location', `%${filters.location}%`)
       }
 
+      query = query.order('created_at', { ascending: false })
+
       const { data, error } = await query
 
-      if (error) throw error
+      if (error) {
+        console.error('Supabase query error:', error)
+        throw error
+      }
+
+      console.log('Jobs fetched:', data)
       setJobs(data || [])
     } catch (error) {
       console.error('Error fetching jobs:', error)
