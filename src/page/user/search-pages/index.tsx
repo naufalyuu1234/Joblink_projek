@@ -74,23 +74,20 @@ export default function SearchPages() {
         {/* Daftar Pekerjaan */}
         <div className="space-y-4">
           {jobList.map((job) => (
-            <div key={job.id} className="border p-6 rounded-md shadow-md flex items-start gap-4 bg-white hover:shadow-lg transition-all">
+            <div key={job.id} className="p-6 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-[#22243b] hover:border-gray-300 dark:hover:border-gray-600 transition-colors   ">
               {job.icon}
               <div>
-                <h2 className="text-xl font-semibold text-blue-600">{job.title}</h2>
-                <p className="text-gray-700 font-medium">{job.company}</p>
-                <p className="text-sm text-gray-500">{job.location} • {job.type} • {job.salary}</p>
-                <p className="mt-2 text-gray-600">{job.description}</p>
-                <button className="mt-3 px-4 py-2 border rounded-md w-full hover:bg-gray-200 transition-all text-black font-bold">
+                <h2 className="text-xl font-semibold text-blue-500">{job.title}</h2>
+                <p className="text-white font-medium">{job.company}</p>
+                <p className="text-sm text-white">{job.location} • {job.type} • {job.salary}</p>
+                <p className="mt-2 text-white">{job.description}</p>
+                <button className="mt-3 px-4 py-2 border rounded-md w-full hover:bg-gray-500 transition-all text-white font-bold">
                   Lihat Detail
                 </button>
               </div>
             </div>
           ))}
         </div>
-        <footer className="mt-10 text-center text-gray-500 text-sm">
-          © 2024 JobLink. Hak Cipta Dilindungi.
-        </footer>
       </div>
     </MainLayout>
   );
