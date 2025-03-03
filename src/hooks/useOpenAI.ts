@@ -7,6 +7,9 @@ const openai = new OpenAI({
 });
 
 
+
+
+
 export function useOpenAI() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
