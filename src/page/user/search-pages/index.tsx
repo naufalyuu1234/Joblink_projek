@@ -4,7 +4,7 @@ import { FaWheelchair, FaSignLanguage, FaUniversalAccess } from 'react-icons/fa'
 import MainLayout from '@/components/layouts/MainLayout';
 import { useJobs } from '@/hooks/useJobs';
 
-// Definisikan tipe untuk job
+// Definisikan interface untuk Job
 interface Job {
   id: string;
   title: string;
@@ -123,7 +123,7 @@ export default function SearchPages() {
                 <p className="text-gray-600 dark:text-gray-300">Tidak ada pekerjaan yang sesuai dengan kriteria pencarian.</p>
               </div>
             ) : (
-              jobs.map((job) => (
+              jobs.map((job: Job) => (
                 <div key={job.id} className="border p-6 rounded-md shadow-md bg-white dark:bg-[#22243b] hover:shadow-lg transition-all">
                   <div className="flex items-start gap-4">
                     {getJobIcon(job.disability_support)}

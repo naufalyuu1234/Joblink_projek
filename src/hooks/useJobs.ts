@@ -1,45 +1,52 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { supabase } from '@/lib/supabase'
 
-interface SearchParams {
+interface Job {
+  id: string;
+  title: string;
+  company: string;
+  location: string;
+  type: string;
+  description: string;
+  disability_support: string[];
+  created_at: string;
+}
+
+interface JobFilters {
   title?: string;
   location?: string;
 }
 
 export function useJobs() {
-  const [jobs, setJobs] = useState([])
+  const [jobs, setJobs] = useState<Job[]>([])
   const [loading, setLoading] = useState(true)
 
-  const fetchJobs = async (params?: SearchParams) => {
+  const fetchJobs = async (filters?: JobFilters) => {
     try {
       setLoading(true)
       let query = supabase
         .from('jobs')
         .select('*')
-        
-      // Add search filters if params exist
-      if (params?.title) {
-        query = query.or(`title.ilike.%${params.title}%,company.ilike.%${params.title}%`)
+        .order('created_at', { ascending: false })
+
+      if (filters?.title) {
+        query = query.ilike('title', `%${filters.title}%`)
       }
-      
-      if (params?.location) {
-        query = query.ilike('location', `%${params.location}%`)
+      if (filters?.location) {
+        query = query.ilike('location', `%${filters.location}%`)
       }
 
-      const { data, error } = await query.order('created_at', { ascending: false })
+      const { data, error } = await query
 
       if (error) throw error
       setJobs(data || [])
     } catch (error) {
       console.error('Error fetching jobs:', error)
+      setJobs([])
     } finally {
       setLoading(false)
     }
   }
-
-  useEffect(() => {
-    fetchJobs()
-  }, [])
 
   return { jobs, loading, fetchJobs }
 } 
