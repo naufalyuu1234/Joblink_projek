@@ -1,8 +1,6 @@
-import React from 'react'
 import MainLayout from '@/components/layouts/MainLayout'
 import { BsMic } from 'react-icons/bs'
-import { FaRobot } from 'react-icons/fa'
-import { FaUser } from 'react-icons/fa'
+import { FaRobot, FaUser } from 'react-icons/fa'
 
 export default function AssistantPage() {
   return (
