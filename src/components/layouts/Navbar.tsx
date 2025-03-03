@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { HiMenuAlt3, HiX } from 'react-icons/hi'
 import { FaSun, FaMoon } from 'react-icons/fa'
-import { FiMenu, FiX as FiLogOut, FiUser } from 'react-icons/fi'
+import { FiX as FiLogOut, FiUser } from 'react-icons/fi'
 import { useTheme } from '@/context/useTheme'
 import { useAuth } from '@/context/AuthContext'
 

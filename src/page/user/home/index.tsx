@@ -13,7 +13,7 @@ export default function HomePage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [locationTerm, setLocationTerm] = useState('');
 
-  const { videos, loading, openVideo } = useVideos()
+  const { videos, loading } = useVideos()
   const { stories, loading: storiesLoading } = useSuccessStories()
 
   const handleSearch = (e: React.FormEvent) => {
