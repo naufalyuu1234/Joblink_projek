@@ -1,5 +1,5 @@
-import React, { useRef } from 'react'
-import { BsBriefcase, BsBuilding, BsBook, BsChevronLeft, BsChevronRight } from 'react-icons/bs'
+import { useRef } from 'react'
+import { BsChevronLeft, BsChevronRight } from 'react-icons/bs'
 import { FaWheelchair, FaSignLanguage, FaUniversalAccess } from 'react-icons/fa'
 import MainLayout from '@/components/layouts/MainLayout'
 
