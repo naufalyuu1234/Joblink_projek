@@ -1,7 +1,39 @@
-import { Link } from 'react-router-dom'
-import { FcGoogle } from 'react-icons/fc'
+import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
+import { FcGoogle } from 'react-icons/fc';
 
 export default function RegisterPage() {
+  const navigate = useNavigate();
+  const { signUp } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+    fullName: '',
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      await signUp(formData.email, formData.password, formData.fullName);
+      navigate('/login', { 
+        state: { 
+          message: 'Registrasi berhasil! Silakan cek email Anda untuk verifikasi.' 
+        }
+      });
+    } catch (error: any) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="bg-white">
       <div className="flex justify-center h-screen">
@@ -38,6 +70,12 @@ export default function RegisterPage() {
               </p>
             </div>
 
+            {error && (
+              <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600">
+                {error}
+              </div>
+            )}
+
             <div className="mt-8">
               <button 
                 type="button"
@@ -53,74 +91,62 @@ export default function RegisterPage() {
                 <div className="flex-1 h-px bg-gray-200"></div>
               </div>
 
-              <form>
+              <form onSubmit={handleSubmit}>
                 <div>
-                  <label
-                    htmlFor="name"
-                    className="block mb-2 text-sm text-gray-600"
-                  >
+                  <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">
                     Nama Lengkap
                   </label>
                   <input
+                    id="fullName"
+                    name="fullName"
                     type="text"
-                    name="name"
-                    id="name"
+                    required
+                    value={formData.fullName}
+                    onChange={(e) => setFormData({ ...formData, fullName: e.target.value })}
+                    className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
                     placeholder="Masukkan nama lengkap"
-                    className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg focus:border-black focus:ring-black focus:outline-none focus:ring focus:ring-opacity-40"
                   />
                 </div>
-
-                <div className="mt-6">
-                  <label
-                    htmlFor="email"
-                    className="block mb-2 text-sm text-gray-600"
-                  >
+                <div>
+                  <label htmlFor="email" className="block text-sm font-medium text-gray-700">
                     Email
                   </label>
                   <input
-                    type="email"
-                    name="email"
                     id="email"
-                    placeholder="nama@email.com"
-                    className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg focus:border-black focus:ring-black focus:outline-none focus:ring focus:ring-opacity-40"
+                    name="email"
+                    type="email"
+                    autoComplete="email"
+                    required
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                    className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                    placeholder="Masukkan email"
                   />
                 </div>
-
-                <div className="mt-6">
-                  <label
-                    htmlFor="password"
-                    className="block mb-2 text-sm text-gray-600"
-                  >
+                <div>
+                  <label htmlFor="password" className="block text-sm font-medium text-gray-700">
                     Password
                   </label>
                   <input
-                    type="password"
-                    name="password"
                     id="password"
-                    placeholder="Minimal 8 karakter"
-                    className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg focus:border-black focus:ring-black focus:outline-none focus:ring focus:ring-opacity-40"
-                  />
-                </div>
-
-                <div className="mt-6">
-                  <label
-                    htmlFor="password_confirmation"
-                    className="block mb-2 text-sm text-gray-600"
-                  >
-                    Konfirmasi Password
-                  </label>
-                  <input
+                    name="password"
                     type="password"
-                    name="password_confirmation"
-                    id="password_confirmation"
-                    placeholder="Konfirmasi password"
-                    className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg focus:border-black focus:ring-black focus:outline-none focus:ring focus:ring-opacity-40"
+                    autoComplete="new-password"
+                    required
+                    value={formData.password}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
+                    className="mt-1 appearance-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm"
+                    placeholder="Masukkan password"
                   />
                 </div>
 
                 <div className="mt-6">
-                  <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-black rounded-lg hover:bg-gray-800 focus:outline-none focus:bg-gray-800">
-                    Daftar
+                  <button 
+                    type="submit"
+                    disabled={loading}
+                    className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-black rounded-lg hover:bg-gray-800 focus:outline-none focus:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                  >
+                    {loading ? 'Mendaftar...' : 'Daftar'}
                   </button>
                 </div>
               </form>
@@ -139,5 +165,5 @@ export default function RegisterPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
