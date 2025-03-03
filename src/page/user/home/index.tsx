@@ -1,10 +1,33 @@
-import { useRef } from 'react'
+import { useRef, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { BsChevronLeft, BsChevronRight } from 'react-icons/bs'
 import { FaWheelchair, FaSignLanguage, FaUniversalAccess } from 'react-icons/fa'
 import MainLayout from '@/components/layouts/MainLayout'
+import { useVideos } from '@/hooks/useVideos'
+import { getYoutubeVideoId } from '@/hooks/useVideos'
+import { useSuccessStories } from '@/hooks/useSuccessStories'
 
 export default function HomePage() {
+  const navigate = useNavigate();
   const videoScrollRef = useRef<HTMLDivElement>(null)
+  const [searchTerm, setSearchTerm] = useState('');
+  const [locationTerm, setLocationTerm] = useState('');
+
+  const { videos, loading, openVideo } = useVideos()
+  const { stories, loading: storiesLoading } = useSuccessStories()
+
+  const handleSearch = (e: React.FormEvent) => {
+    e.preventDefault();
+    const searchParams = new URLSearchParams();
+    
+    if (searchTerm) searchParams.append('search', searchTerm);
+    if (locationTerm) searchParams.append('location', locationTerm);
+    
+    navigate({
+      pathname: '/jobs',
+      search: searchParams.toString()
+    });
+  };
 
   const scroll = (direction: 'left' | 'right') => {
     if (videoScrollRef.current) {
@@ -25,21 +48,28 @@ export default function HomePage() {
           <p className="text-gray-600 dark:text-gray-300 mb-6">
             Platform khusus yang menghubungkan talenta difabel dengan perusahaan inklusif
           </p>
-          <div className="flex flex-col md:flex-row gap-4 mb-8">
+          <form onSubmit={handleSearch} className="flex flex-col md:flex-row gap-4 mb-8">
             <input
               type="text"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
               placeholder="Keahlian atau Posisi"
               className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-400 dark:bg-gray-800 dark:text-white"
             />
             <input
               type="text"
+              value={locationTerm}
+              onChange={(e) => setLocationTerm(e.target.value)}
               placeholder="Lokasi"
               className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-400 dark:bg-gray-800 dark:text-white"
             />
-            <button className="px-6 py-3 bg-black dark:bg-gray-700 text-white rounded-lg hover:bg-gray-800 dark:hover:bg-gray-600 transition-colors">
+            <button 
+              type="submit"
+              className="px-6 py-3 bg-black dark:bg-gray-700 text-white rounded-lg hover:bg-gray-800 dark:hover:bg-gray-600 transition-colors"
+            >
               Cari Pekerjaan
             </button>
-          </div>
+          </form>
 
           {/* Feature Cards */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -121,19 +151,25 @@ export default function HomePage() {
             ref={videoScrollRef}
             className="flex overflow-x-auto gap-6 pb-6 scrollbar-hide"
           >
-            {[
-              { title: "Tips Wawancara Kerja", category: "Panduan Karir" },
-              { title: "Menulis CV yang Menarik", category: "Tutorial" },
-              { title: "Hak-Hak Pekerja Difabel", category: "Informasi" },
-              { title: "Adaptasi di Tempat Kerja", category: "Pengalaman" },
-              { title: "Pengembangan Soft Skills", category: "Tutorial" }
-            ].map((video, index) => (
-              <div key={index} className="flex-none w-[300px]">
-                <div className="aspect-video bg-gray-100 dark:bg-[#22243b] rounded-lg mb-3"></div>
-                <h3 className="font-semibold mb-1 dark:text-white">{video.title}</h3>
-                <p className="text-sm text-gray-600 dark:text-gray-400">{video.category}</p>
-              </div>
-            ))}
+            {loading ? (
+              <div className="flex-none w-[300px] aspect-video bg-gray-100 dark:bg-[#22243b] rounded-lg animate-pulse" />
+            ) : (
+              videos.map((video) => (
+                <div key={video.id} className="flex-none w-[300px]">
+                  <div className="aspect-video rounded-lg overflow-hidden mb-3">
+                    <iframe
+                      className="w-full h-full"
+                      src={`https://www.youtube.com/embed/${getYoutubeVideoId(video.video_url)}`}
+                      title={video.title}
+                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                      allowFullScreen
+                    />
+                  </div>
+                  <h3 className="font-semibold mb-1 dark:text-white">{video.title}</h3>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">{video.category}</p>
+                </div>
+              ))
+            )}
           </div>
         </section>
 
@@ -141,26 +177,47 @@ export default function HomePage() {
         <section className="mb-8">
           <h2 className="text-xl font-bold mb-4 dark:text-white">Kisah Sukses</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 bg-white dark:bg-[#22243b]">
-              <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-full mb-4"></div>
-              <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">
-                "JobLinks membantu saya menemukan perusahaan yang benar-benar menghargai kemampuan saya, bukan keterbatasan saya."
-              </p>
-              <div>
-                <p className="font-semibold dark:text-white">Ahmad R.</p>
-                <p className="text-gray-600 dark:text-gray-400 text-sm">UI/UX Designer</p>
-              </div>
-            </div>
-            <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 bg-white dark:bg-[#22243b]">
-              <div className="w-12 h-12 bg-gray-100 dark:bg-gray-700 rounded-full mb-4"></div>
-              <p className="text-gray-600 dark:text-gray-300 text-sm mb-4">
-                "Platform ini memberikan kesempatan yang sama bagi semua orang. Saya merasa dihargai dan didukung dalam karir saya."
-              </p>
-              <div>
-                <p className="font-semibold dark:text-white">Siti M.</p>
-                <p className="text-gray-600 dark:text-gray-400 text-sm">Data Analyst</p>
-              </div>
-            </div>
+            {storiesLoading ? (
+              <>
+                <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 bg-white dark:bg-[#22243b] animate-pulse">
+                  <div className="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-full mb-4"></div>
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-4"></div>
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+                </div>
+                <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 bg-white dark:bg-[#22243b] animate-pulse">
+                  <div className="w-12 h-12 bg-gray-200 dark:bg-gray-700 rounded-full mb-4"></div>
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-4"></div>
+                  <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+                </div>
+              </>
+            ) : (
+              stories.slice(0, 2).map((story) => (
+                <div key={story.id} className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 bg-white dark:bg-[#22243b]">
+                  <div className="flex items-center gap-4 mb-4">
+                    <img 
+                      src={story.avatar_url} 
+                      alt={story.full_name} 
+                      className="w-12 h-12 rounded-full"
+                    />
+                    <div>
+                      <h3 className="font-semibold dark:text-white">{story.full_name}</h3>
+                      <p className="text-sm text-gray-600 dark:text-gray-400">
+                        {story.role} • {story.company}
+                      </p>
+                    </div>
+                  </div>
+                  <p className="text-gray-600 dark:text-gray-300 text-sm mb-3">{story.story}</p>
+                  <div className="flex gap-2">
+                    <span className="px-3 py-1 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 text-sm rounded-full">
+                      {story.disability_type}
+                    </span>
+                    <span className="px-3 py-1 bg-green-50 dark:bg-green-900/30 text-green-600 dark:text-green-300 text-sm rounded-full">
+                      {story.years_of_experience}
+                    </span>
+                  </div>
+                </div>
+              ))
+            )}
           </div>
         </section>
       </div>

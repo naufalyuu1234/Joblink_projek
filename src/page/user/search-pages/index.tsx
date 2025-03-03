@@ -1,96 +1,157 @@
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { FaWheelchair, FaSignLanguage, FaUniversalAccess } from 'react-icons/fa';
 import MainLayout from '@/components/layouts/MainLayout';
+import { useJobs } from '@/hooks/useJobs';
+
+// Definisikan tipe untuk job
+interface Job {
+  id: string;
+  title: string;
+  company: string;
+  location: string;
+  type: string;
+  description: string;
+  disability_support: string[];
+  created_at: string;
+}
 
 export default function SearchPages() {
-  const jobList = [
-    {
-      id: 1,
-      title: 'Admin Kantor',
-      company: 'PT Maju Bersama',
-      location: 'Jakarta Selatan',
-      type: 'Full-time',
-      salary: 'Rp 4-5 Jt',
-      description:
-        'Dibutuhkan admin untuk mengelola dokumen, input data, dan menerima telepon. Lingkungan kerja ramah disabilitas dengan fasilitas lengkap.',
-      icon: <FaWheelchair className="text-blue-600 text-2xl" />,
-    },
-    {
-      id: 2,
-      title: 'Kasir Mini Market',
-      company: 'Minimart Sejahtera',
-      location: 'Jakarta Timur',
-      type: 'Part-time',
-      salary: 'Rp 2-3 Jt',
-      description:
-        'Lowongan untuk posisi kasir. Tersedia kursi khusus dan meja kasir yang disesuaikan. Pelatihan diberikan. fasilitas lengkap dan nyaman.',
-      icon: <FaSignLanguage className="text-green-600 text-2xl" />,
-    },
-    {
-      id: 3,
-      title: 'Customer Service',
-      company: 'Sinar Nasional Indonesia',
-      location: 'Jakarta Pusat',
-      type: 'Full-time',
-      salary: 'Rp 3-4 Jt',
-      description:
-        'Melayani pelanggan via telepon dan email. Tersedia pelatihan khusus serta teknologi yang dapat disesuaikan, Tersedia mesh dan makan siang.',
-      icon: <FaUniversalAccess className="text-purple-600 text-2xl" />,
-    },
-    {
-      id: 4,
-      title: 'Petugas Kebersihan',
-      company: 'Mall Central Jakarta',
-      location: 'Jakarta Pusat',
-      type: 'Full-time',
-      salary: 'Rp 2,5-3,5 Jt',
-      description:
-        'Membersihkan area mall dan fasilitas umum. Peralatan modern dan ringan, ideal untuk disabilitas, kami memfasilitasi kursi roda untuk pengelaman kerja yang lebih baik lagi.',
-      icon: <FaWheelchair className="text-red-600 text-2xl" />,
-    },
-  ];
+  const [searchParams, setSearchParams] = useSearchParams();
+  const { jobs, loading, fetchJobs } = useJobs();
+  const [searchTerm, setSearchTerm] = useState(searchParams.get('search') || '');
+  const [locationFilter, setLocationFilter] = useState(searchParams.get('location') || '');
+
+  // Function untuk mendapatkan icon berdasarkan disability support
+  const getJobIcon = (support: string[]) => {
+    if (support.includes('Wheelchair Accessible')) {
+      return <FaWheelchair className="text-blue-600 text-2xl" />;
+    } else if (support.includes('Sign Language Support')) {
+      return <FaSignLanguage className="text-green-600 text-2xl" />;
+    }
+    return <FaUniversalAccess className="text-purple-600 text-2xl" />;
+  };
+
+  const handleSearch = () => {
+    // Update URL params
+    const params = new URLSearchParams();
+    if (searchTerm) params.append('search', searchTerm);
+    if (locationFilter) params.append('location', locationFilter);
+    setSearchParams(params);
+
+    // Fetch jobs
+    fetchJobs({
+      title: searchTerm,
+      location: locationFilter
+    });
+  };
+
+  // const resetFilters = () => {
+  //   setSearchTerm('');
+  //   setLocationFilter('');
+  //   setSearchParams({});
+  //   fetchJobs();
+  // };
+
+  // Initial search based on URL params
+  useEffect(() => {
+    if (searchParams.get('search') || searchParams.get('location')) {
+      fetchJobs({
+        title: searchParams.get('search') || undefined,
+        location: searchParams.get('location') || undefined
+      });
+    }
+  }, []);
 
   return (
     <MainLayout>
-      <div className="max-w-5xl mx-auto p-4">
-        <h1 className="text-3xl font-bold mb-6 text-center">Hasil Pencarian</h1>
-        <div className="flex flex-col md:flex-row gap-4 mb-8">
-            <input
-              type="text"
-              placeholder="Keahlian atau Posisi"
-              className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-400 dark:bg-gray-800 dark:text-white"
-            />
-            <input
-              type="text"
-              placeholder="Lokasi"
-              className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-400 dark:bg-gray-800 dark:text-white"
-            />
-            <button className="px-6 py-3 bg-black dark:bg-gray-700 text-white rounded-lg hover:bg-gray-800 dark:hover:bg-gray-600 transition-colors">
-              Cari Pekerjaan
-            </button>
-          </div>
-        <div className="flex justify-end mb-4">
-          <button className="border px-4 py-2 rounded-md hover:bg-gray-100 transition-all">🛠 Reset Filter</button>
-        </div>
-        {/* Daftar Pekerjaan */}
-        <div className="space-y-4">
-          {jobList.map((job) => (
-            <div key={job.id} className="border p-6 rounded-md shadow-md flex items-start gap-4 bg-white hover:shadow-lg transition-all">
-              {job.icon}
-              <div>
-                <h2 className="text-xl font-semibold text-blue-600">{job.title}</h2>
-                <p className="text-gray-700 font-medium">{job.company}</p>
-                <p className="text-sm text-gray-500">{job.location} • {job.type} • {job.salary}</p>
-                <p className="mt-2 text-gray-600">{job.description}</p>
-                <button className="mt-3 px-4 py-2 border rounded-md w-full hover:bg-gray-200 transition-all text-black font-bold">
-                  Lihat Detail
-                </button>
-              </div>
+      <div className="max-w-7xl mx-auto p-4">
+        {/* Search Section */}
+        <div className="mb-8">
+          <h1 className="text-3xl font-bold mb-6 text-center dark:text-white">
+            {searchTerm || locationFilter ? 'Hasil Pencarian' : 'Semua Lowongan'}
+          </h1>
+          <div className="max-w-4xl mx-auto">
+            <div className="flex flex-col md:flex-row gap-4 mb-4">
+              <input
+                type="text"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                placeholder="Keahlian atau Posisi"
+                className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-400 dark:bg-gray-800 dark:text-white"
+              />
+              <input
+                type="text"
+                value={locationFilter}
+                onChange={(e) => setLocationFilter(e.target.value)}
+                placeholder="Lokasi"
+                className="flex-1 px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:outline-none focus:ring-1 focus:ring-gray-400 dark:bg-gray-800 dark:text-white"
+              />
+              <button 
+                onClick={handleSearch}
+                className="px-6 py-3 bg-black dark:bg-gray-700 text-white rounded-lg hover:bg-gray-800 dark:hover:bg-gray-600 transition-colors whitespace-nowrap"
+              >
+                Cari Pekerjaan
+              </button>
             </div>
-          ))}
+            {/* <div className="flex justify-end">
+              <button 
+                onClick={resetFilters}
+                className="px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors dark:text-white"
+              >
+                🛠 Reset Filter
+              </button>
+            </div> */}
+          </div>
         </div>
-        <footer className="mt-10 text-center text-gray-500 text-sm">
-          © 2024 JobLink. Hak Cipta Dilindungi.
-        </footer>
+
+        {/* Jobs List */}
+        {loading ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {[1, 2, 3, 4, 5, 6].map((n) => (
+              <div key={n} className="border p-6 rounded-md shadow-md bg-white dark:bg-[#22243b] animate-pulse">
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4 mb-4"></div>
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-4"></div>
+                <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-full"></div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {jobs.length === 0 ? (
+              <div className="col-span-full text-center py-10">
+                <p className="text-gray-600 dark:text-gray-300">Tidak ada pekerjaan yang sesuai dengan kriteria pencarian.</p>
+              </div>
+            ) : (
+              jobs.map((job) => (
+                <div key={job.id} className="border p-6 rounded-md shadow-md bg-white dark:bg-[#22243b] hover:shadow-lg transition-all">
+                  <div className="flex items-start gap-4">
+                    {getJobIcon(job.disability_support)}
+                    <div className="flex-1">
+                      <h2 className="text-xl font-semibold text-blue-600 dark:text-blue-400">{job.title}</h2>
+                      <p className="text-gray-700 dark:text-gray-200 font-medium">{job.company}</p>
+                      <p className="text-sm text-gray-500 dark:text-gray-400">{job.location} • {job.type}</p>
+                      <p className="mt-2 text-gray-600 dark:text-gray-300 line-clamp-2">{job.description}</p>
+                      <div className="mt-3 flex flex-wrap gap-2">
+                        {job.disability_support.map((support, index) => (
+                          <span 
+                            key={index}
+                            className="px-3 py-1 text-sm bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 rounded-full"
+                          >
+                            {support}
+                          </span>
+                        ))}
+                      </div>
+                      <button className="mt-3 px-4 py-2 border rounded-md w-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-all text-black dark:text-white font-bold dark:border-gray-600">
+                        Lihat Detail
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        )}
       </div>
     </MainLayout>
   );

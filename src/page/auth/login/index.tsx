@@ -1,7 +1,36 @@
-import { Link } from 'react-router-dom'
-import { FcGoogle } from 'react-icons/fc'
+import { useState } from 'react';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
+import { useAuth } from '@/context/AuthContext';
+import { FcGoogle } from 'react-icons/fc';
 
 export default function LoginPage() {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { signIn } = useAuth();
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const message = location.state?.message;
+
+  const [formData, setFormData] = useState({
+    email: '',
+    password: '',
+  });
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError('');
+    setLoading(true);
+
+    try {
+      await signIn(formData.email, formData.password);
+      navigate('/');
+    } catch (error: any) {
+      setError(error.message);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="bg-white">
       <div className="flex justify-center h-screen">
@@ -38,6 +67,18 @@ export default function LoginPage() {
               </p>
             </div>
 
+            {message && (
+              <div className="mt-4 p-4 bg-green-50 border border-green-200 rounded-lg text-sm text-green-600">
+                {message}
+              </div>
+            )}
+
+            {error && (
+              <div className="mt-4 p-4 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600">
+                {error}
+              </div>
+            )}
+
             <div className="mt-8">
               <button 
                 type="button"
@@ -53,7 +94,7 @@ export default function LoginPage() {
                 <div className="flex-1 h-px bg-gray-200"></div>
               </div>
 
-              <form>
+              <form onSubmit={handleSubmit}>
                 <div>
                   <label
                     htmlFor="email"
@@ -65,6 +106,8 @@ export default function LoginPage() {
                     type="email"
                     name="email"
                     id="email"
+                    value={formData.email}
+                    onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder="nama@email.com"
                     className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg focus:border-black focus:ring-black focus:outline-none focus:ring focus:ring-opacity-40"
                   />
@@ -89,14 +132,20 @@ export default function LoginPage() {
                     type="password"
                     name="password"
                     id="password"
+                    value={formData.password}
+                    onChange={(e) => setFormData({ ...formData, password: e.target.value })}
                     placeholder="Masukkan password"
                     className="block w-full px-4 py-2 mt-2 text-gray-700 placeholder-gray-400 bg-white border border-gray-200 rounded-lg focus:border-black focus:ring-black focus:outline-none focus:ring focus:ring-opacity-40"
                   />
                 </div>
 
                 <div className="mt-6">
-                  <button className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-black rounded-lg hover:bg-gray-800 focus:outline-none focus:bg-gray-800">
-                    Masuk
+                  <button 
+                    type="submit"
+                    disabled={loading}
+                    className="w-full px-4 py-2 tracking-wide text-white transition-colors duration-200 transform bg-black rounded-lg hover:bg-gray-800 focus:outline-none focus:bg-gray-800 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                  >
+                    {loading ? 'Masuk...' : 'Masuk'}
                   </button>
                 </div>
               </form>
@@ -115,5 +164,5 @@ export default function LoginPage() {
         </div>
       </div>
     </div>
-  )
+  );
 }
