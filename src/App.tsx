@@ -5,6 +5,7 @@ import HomePage from './page/user/home'
 import LoginPage from './page/auth/login'
 import RegisterPage from './page/auth/register'
 import SearchPages from './page/user/search-pages'
+import AssistantPage from './page/user/assistant'
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="/jobs" element={<SearchPages />} />
             <Route path="/login" element={<LoginPage />} />
+            <Route path="/assistant" element={<AssistantPage />} />
             <Route path="/register" element={<RegisterPage />} />
           </Routes>
         </AuthProvider>
