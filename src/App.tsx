@@ -6,7 +6,6 @@ import AssistantPage from './page/user/assistant'
 import LoginPage from './page/auth/login'
 import RegisterPage from './page/auth/register'
 import SearchPages from './page/user/search-pages'
-import AssistantPage from './page/user/assistant'
 
 function App() {
   return (

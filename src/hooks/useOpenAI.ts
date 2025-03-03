@@ -6,12 +6,6 @@ const openai = new OpenAI({
   dangerouslyAllowBrowser: true
 });
 
-interface JobRecommendation {
-  id: string;
-  title: string;
-  company: string;
-  type: string;
-}
 
 export function useOpenAI() {
   const [loading, setLoading] = useState(false);
