@@ -4,6 +4,7 @@ import HomePage from './page/user/home'
 import LoginPage from './page/auth/login'
 import RegisterPage from './page/auth/register'
 import AssistantPage from './page/user/assistant'
+import SearchPages from './page/user/search-pages'
 
 export default function App() {
   return (
@@ -14,6 +15,7 @@ export default function App() {
           <Route path='/login' element={<LoginPage/>}/>
           <Route path='/register' element={<RegisterPage/>}/>
           <Route path='/assistant' element={<AssistantPage/>}/>
+          <Route path='/jobs' element={<SearchPages/>}/>
         </Routes>
       </BrowserRouter>
     </ThemeProvider>
