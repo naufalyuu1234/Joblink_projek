@@ -2,7 +2,7 @@ import { useState } from 'react';
 import OpenAI from 'openai';
 
 const openai = new OpenAI({
-  apiKey: "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",
+  apiKey: "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",
   dangerouslyAllowBrowser: true
 });
 
