@@ -1,10 +1,13 @@
 import React, { useState } from 'react'
 import { Link, useLocation } from 'react-router-dom'
 import { HiMenuAlt3, HiX } from 'react-icons/hi'
+import { FaSun, FaMoon } from 'react-icons/fa'
+import { useTheme } from '@/context/useTheme'
 
 export default function Navbar() {
   const [isOpen, setIsOpen] = useState(false)
   const location = useLocation()
+  const { theme, toggleTheme } = useTheme()
 
   const isActivePath = (path: string) => {
     return location.pathname === path
@@ -13,19 +16,19 @@ export default function Navbar() {
   const navLinkClass = (path: string) => {
     return `transition duration-300 ${
       isActivePath(path)
-        ? 'text-black font-medium'
-        : 'text-gray-600 hover:text-gray-900'
+        ? 'text-white font-medium'
+        : 'text-gray-300 hover:text-white'
     }`
   }
 
   return (
-    <nav className="bg-white border-b border-gray-200">
+    <nav className="bg-[#22243b] border-b border-gray-700">
       <div className="container mx-auto px-4 md:px-6 lg:px-8">
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link to="/" className="flex items-center">
-              <span className="text-lg font-bold text-gray-800">JobLink</span>
+              <span className="text-lg font-bold text-white">JobLink</span>
             </Link>
           </div>
 
@@ -47,17 +50,24 @@ export default function Navbar() {
             </div>
           </div>
 
-          {/* Auth Buttons */}
+          {/* Auth Buttons & Theme Toggle */}
           <div className="hidden md:flex items-center space-x-4">
+            <button
+              onClick={toggleTheme}
+              className="p-2 text-gray-300 hover:text-white"
+              aria-label="Toggle theme"
+            >
+              {theme === 'dark' ? <FaSun className="w-5 h-5" /> : <FaMoon className="w-5 h-5" />}
+            </button>
             <Link 
               to="/login"
-              className="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
+              className="px-4 py-2 text-gray-300 border border-gray-600 rounded-lg hover:bg-gray-700"
             >
               Login
             </Link>
             <Link 
               to="/register"
-              className="px-4 py-2 bg-black text-white rounded-lg hover:bg-gray-800"
+              className="px-4 py-2 bg-white text-gray-900 rounded-lg hover:bg-gray-100"
             >
               Daftar
             </Link>
@@ -67,7 +77,7 @@ export default function Navbar() {
           <div className="md:hidden">
             <button
               onClick={() => setIsOpen(!isOpen)}
-              className="text-gray-500 hover:text-gray-600"
+              className="text-gray-300 hover:text-white"
               aria-label="Toggle menu"
             >
               {isOpen ? (
@@ -110,13 +120,13 @@ export default function Navbar() {
               <div className="pt-4 space-y-2">
                 <Link
                   to="/login"
-                  className="block w-full px-4 py-2 text-center text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-50"
+                  className="block w-full px-4 py-2 text-center text-gray-300 border border-gray-600 rounded-lg hover:bg-gray-700"
                 >
                   Login
                 </Link>
                 <Link
                   to="/register"
-                  className="block w-full px-4 py-2 text-center bg-black text-white rounded-lg hover:bg-gray-800"
+                  className="block w-full px-4 py-2 text-center bg-white text-gray-900 rounded-lg hover:bg-gray-100"
                 >
                   Daftar
                 </Link>
