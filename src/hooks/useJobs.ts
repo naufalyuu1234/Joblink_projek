@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { supabase } from '@/lib/supabase'
 
 interface Job {
@@ -55,6 +55,11 @@ export function useJobs() {
       setLoading(false)
     }
   }
+
+  // Fetch jobs when component mounts
+  useEffect(() => {
+    fetchJobs()
+  }, [])
 
   return { jobs, loading, fetchJobs }
 } 
