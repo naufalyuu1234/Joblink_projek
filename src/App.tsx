@@ -6,6 +6,7 @@ import AssistantPage from './page/user/assistant'
 import LoginPage from './page/auth/login'
 import RegisterPage from './page/auth/register'
 import SearchPages from './page/user/search-pages'
+import Profile from './page/user/profile' 
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/assistant" element={<AssistantPage />} />
             <Route path="/register" element={<RegisterPage />} />
+            <Route path="/profile" element={<Profile />} />
           </Routes>
         </AuthProvider>
       </ThemeProvider>
