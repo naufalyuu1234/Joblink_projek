@@ -77,11 +77,11 @@ export default function SearchPages() {
             <div key={job.id} className="p-6 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-[#22243b] hover:border-gray-300 dark:hover:border-gray-600 transition-colors   ">
               {job.icon}
               <div>
-                <h2 className="text-xl font-semibold text-blue-500">{job.title}</h2>
-                <p className="text-white font-medium">{job.company}</p>
-                <p className="text-sm text-white">{job.location} • {job.type} • {job.salary}</p>
-                <p className="mt-2 text-white">{job.description}</p>
-                <button className="mt-3 px-4 py-2 border rounded-md w-full hover:bg-gray-500 transition-all text-white font-bold">
+                <h2 className="text-xl font-semibold text-blue-500 ">{job.title}</h2>
+                <p className="text-dark dark:text-white font-medium ">{job.company}</p>
+                <p className="text-sm text-dark dark:text-white">{job.location} • {job.type} • {job.salary}</p>
+                <p className="mt-2 text-dark dark:text-white">{job.description}</p>
+                <button className="mt-3 px-4 py-2 border rounded-md w-full hover:bg-gray-500 transition-all text-dark font-bold dark:text-white">
                   Lihat Detail
                 </button>
               </div>
