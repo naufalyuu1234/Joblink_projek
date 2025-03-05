@@ -66,12 +66,13 @@ export default function SearchPages() {
       // Jika tidak ada parameter search, fetch semua jobs
       fetchJobs();
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []); // Jalankan sekali saat mount
 
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  function navLinkClass(): string | undefined {
-    throw new Error('Function not implemented.');
-  }
+   
+  // function navLinkClass(): string | undefined {
+  //   throw new Error('Function not implemented.');
+  // }
 
   return (
     <MainLayout>
