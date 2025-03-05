@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { FaWheelchair, FaSignLanguage, FaUniversalAccess } from 'react-icons/fa';
 import MainLayout from '@/components/layouts/MainLayout';
 import { useJobs } from '@/hooks/useJobs';
+import { Link } from "react-router-dom";
 
 // Definisikan interface untuk Job
 interface Job {
@@ -66,6 +67,11 @@ export default function SearchPages() {
       fetchJobs();
     }
   }, []); // Jalankan sekali saat mount
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  function navLinkClass(): string | undefined {
+    throw new Error('Function not implemented.');
+  }
 
   return (
     <MainLayout>
@@ -147,7 +153,11 @@ export default function SearchPages() {
                         ))}
                       </div>
                       <button className="mt-3 px-4 py-2 border rounded-md w-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-all text-black dark:text-white font-bold dark:border-gray-600">
-                        Lihat Detail
+                      <Link to={`/detail/penjahit`}>
+                          <button>
+                            lihat detail
+                          </button>
+                      </Link>
                       </button>
                     </div>
                   </div>

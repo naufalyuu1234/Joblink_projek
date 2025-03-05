@@ -7,6 +7,8 @@ import LoginPage from './page/auth/login'
 import RegisterPage from './page/auth/register'
 import SearchPages from './page/user/search-pages'
 import Profile from './page/user/profile' 
+import Compani from './page/user/compani'
+import Detail from './page/user/detail'
 
 function App() {
   return (
@@ -20,6 +22,8 @@ function App() {
             <Route path="/assistant" element={<AssistantPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/companies" element={<Compani />} />
+            <Route path="/detail/:id" element={<Detail/>} />
           </Routes>
         </AuthProvider>
       </ThemeProvider>
