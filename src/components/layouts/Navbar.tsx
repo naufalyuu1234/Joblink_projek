@@ -12,8 +12,7 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link to="/" className="flex items-center">
-              <img src="/src/assets/7.png" alt="Logo" className="h-8 w-auto" />
-              <span className="ml-2 text-lg font-bold text-gray-800">JobLink</span>
+              <img src="/src/assets/7.png" alt="Logo" className="h-32 w-50" />
             </Link>
           </div>
 
