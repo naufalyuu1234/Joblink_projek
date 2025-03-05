@@ -41,7 +41,11 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link to="/" className="flex items-center">
-              <span className="text-lg font-bold text-white">JobLink</span>
+              <img
+                src="/src/assets/6.png"
+                alt="JobLink"
+                className="w-60 h-60 py-12"
+                />
             </Link>
           </div>
 

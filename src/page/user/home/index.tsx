@@ -46,7 +46,7 @@ export default function HomePage() {
         <section className="py-12">
           <h1 className="text-3xl font-bold mb-3 dark:text-white">Temukan Pekerjaan Inklusif</h1>
           <p className="text-gray-600 dark:text-gray-300 mb-6">
-            Platform khusus yang menghubungkan talenta difabel dengan perusahaan inklusif
+            Platform khusus yang menghubungkan talenta disabilitas dengan perusahaan inklusif
           </p>
           <form onSubmit={handleSearch} className="flex flex-col md:flex-row gap-4 mb-8">
             <input
@@ -77,7 +77,7 @@ export default function HomePage() {
               <div className="mb-4">
                 <FaWheelchair className="w-8 h-8 text-blue-600 dark:text-blue-400" />
               </div>
-              <h3 className="font-semibold mb-2 dark:text-white">Pekerjaan Ramah Difabel</h3>
+              <h3 className="font-semibold mb-2 dark:text-white">Pekerjaan Ramah Disabilitas</h3>
               <p className="text-sm text-gray-600 dark:text-gray-300">
                 Temukan perusahaan dengan fasilitas dan lingkungan kerja yang aksesibel
               </p>

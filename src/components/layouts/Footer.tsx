@@ -8,7 +8,7 @@ export default function Footer() {
           <div>
             <h3 className="text-lg font-bold text-white mb-4">JobLink</h3>
             <p className="text-gray-300">
-              Platform yang menghubungkan talenta difabel dengan perusahaan inklusif
+              Platform yang menghubungkan talenta disabilitas dengan perusahaan inklusif
             </p>
           </div>
           <div>
@@ -68,7 +68,7 @@ export default function Footer() {
           </div>
         </div>
         <div className="border-t border-gray-700 mt-8 pt-8 text-center text-gray-300">
-          <p>&copy; 2024 JobLink. All rights reserved.</p>
+          <p>&copy; 2025 JobLink. All rights reserved.</p>
         </div>
       </div>
     </footer>

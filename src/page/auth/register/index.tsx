@@ -27,8 +27,12 @@ export default function RegisterPage() {
           message: 'Registrasi berhasil! Silakan cek email Anda untuk verifikasi.' 
         }
       });
-    } catch (error: any) {
-      setError(error.message);
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        setError(error.message);
+      } else {
+        setError('An unknown error occurred');
+      }
     } finally {
       setLoading(false);
     }
