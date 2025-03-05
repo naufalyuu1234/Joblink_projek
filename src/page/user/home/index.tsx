@@ -1,5 +1,5 @@
-import React, { useRef } from 'react'
-import { BsBriefcase, BsBuilding, BsBook, BsChevronLeft, BsChevronRight } from 'react-icons/bs'
+import { useRef } from 'react'
+import { BsChevronLeft, BsChevronRight } from 'react-icons/bs'
 import { FaWheelchair, FaSignLanguage, FaUniversalAccess } from 'react-icons/fa'
 import MainLayout from '@/components/layouts/MainLayout'
 
@@ -45,7 +45,7 @@ export default function HomePage() {
               <div className="mb-4">
                 <FaWheelchair className="w-8 h-8 text-blue-600" />
               </div>
-              <h3 className="font-semibold mb-2">Pekerjaan Ramah Difabel</h3>
+              <h3 className="font-semibold mb-2">Pekerjaan Ramah Disabilitas</h3>
               <p className="text-sm text-gray-600">Temukan perusahaan dengan fasilitas dan lingkungan kerja yang aksesibel</p>
             </div>
             <div className="p-6 border border-gray-200 rounded-lg hover:border-gray-300 transition-colors">

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { HiMenuAlt3, HiX } from 'react-icons/hi'
 
@@ -12,7 +12,7 @@ export default function Navbar() {
           {/* Logo */}
           <div className="flex-shrink-0">
             <Link to="/" className="flex items-center">
-              {/* <img src="/path-to-your-logo.png" alt="Logo" className="h-8 w-auto" /> */}
+              <img src="/src/assets/7.png" alt="Logo" className="h-8 w-auto" />
               <span className="ml-2 text-lg font-bold text-gray-800">JobLink</span>
             </Link>
           </div>
