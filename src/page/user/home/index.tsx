@@ -6,8 +6,19 @@ import MainLayout from '@/components/layouts/MainLayout'
 import { useVideos } from '@/hooks/useVideos'
 import { getYoutubeVideoId } from '@/hooks/useVideos'
 import { useSuccessStories } from '@/hooks/useSuccessStories'
+import { motion } from 'framer-motion';
+import AOS from 'aos';
+import { useEffect } from 'react';
 
 export default function HomePage() {
+  useEffect(() => {
+    AOS.init({
+      duration: 1000, // Durasi animasi 1 detik
+      once: true, // Animasi hanya berjalan sekali
+      easing: 'ease-in-out', // Transisi lebih natural
+      delay: 100, // Sedikit delay agar efek muncul lebih smooth
+    });
+  }, []);
   const navigate = useNavigate();
   const videoScrollRef = useRef<HTMLDivElement>(null)
   const [searchTerm, setSearchTerm] = useState('');
@@ -42,6 +53,12 @@ export default function HomePage() {
   return (
     <MainLayout>
       <div className="space-y-12 dark:bg-[#1a1b2e]">
+      <motion.div 
+        initial={{ opacity: 0, x: -20 }}
+        animate={{ opacity: 1, x: 0 }}
+        transition={{ duration: 0.5, delay: 0.2 }}
+        className="flex flex-col md:flex-row gap-8"
+      >
         {/* Hero Section */}
         <section className="py-12">
           <h1 className="text-3xl font-bold mb-3 dark:text-white">Temukan Pekerjaan Inklusif</h1>
@@ -72,7 +89,10 @@ export default function HomePage() {
           </form>
 
           {/* Feature Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div 
+          className="grid grid-cols-1 md:grid-cols-3 gap-6"
+          data-aos="zoom-in"
+          >
             <div className="p-6 border border-gray-200 dark:border-gray-700 rounded-lg bg-white dark:bg-[#22243b] hover:border-gray-300 dark:hover:border-gray-600 transition-colors">
               <div className="mb-4">
                 <FaWheelchair className="w-8 h-8 text-blue-600 dark:text-blue-400" />
@@ -102,9 +122,11 @@ export default function HomePage() {
             </div>
           </div>
         </section>
+        </motion.div>
 
         {/* Featured Jobs */}
-        <section>
+        <section 
+          data-aos="fade-up">
           <h2 className="text-xl font-bold mb-4 dark:text-white">Lowongan Terbaru</h2>
           <div className="border border-gray-200 dark:border-gray-700 rounded-lg p-6 bg-white dark:bg-[#22243b]">
             <div className="mb-3">
@@ -129,7 +151,8 @@ export default function HomePage() {
         </section>
 
         {/* Video Tutorial Section */}
-        <section>
+        <section
+        data-aos="fade-left">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-bold dark:text-white">Video Panduan Karir</h2>
             <div className="flex gap-2">
@@ -174,7 +197,10 @@ export default function HomePage() {
         </section>
 
         {/* Success Stories */}
-        <section className="mb-8">
+        <section 
+        className="mb-8"
+        data-aos="fade-up"
+        >
           <h2 className="text-xl font-bold mb-4 dark:text-white">Kisah Sukses</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             {storiesLoading ? (
