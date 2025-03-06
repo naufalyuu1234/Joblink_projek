@@ -42,9 +42,9 @@ export default function Navbar() {
           <div className="flex-shrink-0">
             <Link to="/" className="flex items-center">
               <img
-                src="/public/6.png"
+                src="/6.png"
                 alt="JobLink"
-                className="w-60 h-60 py-12"
+                className="w-50 h-40 py-8"
                 />
             </Link>
           </div>
