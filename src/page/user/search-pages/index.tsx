@@ -154,7 +154,7 @@ export default function SearchPages() {
                         ))}
                       </div>
                       <button className="mt-3 px-4 py-2 border rounded-md w-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-all text-black dark:text-white font-bold dark:border-gray-600">
-                      <Link to={`/detail/penjahit`}>
+                      <Link to={`/detail/${job.id}`}>
                           <button>
                             lihat detail
                           </button>
