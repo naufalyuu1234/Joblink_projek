@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link, useSearchParams } from 'react-router-dom';
 import { FaWheelchair, FaSignLanguage, FaUniversalAccess } from 'react-icons/fa';
 import MainLayout from '@/components/layouts/MainLayout';
 import { useJobs } from '@/hooks/useJobs';
@@ -147,7 +147,9 @@ export default function SearchPages() {
                         ))}
                       </div>
                       <button className="mt-3 px-4 py-2 border rounded-md w-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-all text-black dark:text-white font-bold dark:border-gray-600">
-                        Lihat Detail
+                        <Link to='job'>
+                          Lihat Detail
+                        </Link>
                       </button>
                     </div>
                   </div>

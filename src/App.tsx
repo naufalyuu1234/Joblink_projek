@@ -7,7 +7,7 @@ import LoginPage from './page/auth/login'
 import RegisterPage from './page/auth/register'
 import SearchPages from './page/user/search-pages'
 import Profile from './page/user/profile' 
-
+import JobDetail from './page/user/detail'
 function App() {
   return (
     <BrowserRouter>
@@ -20,6 +20,7 @@ function App() {
             <Route path="/assistant" element={<AssistantPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/profile" element={<Profile />} />
+            <Route path="/jobs/:id" element={<JobDetail />} />
           </Routes>
         </AuthProvider>
       </ThemeProvider>
