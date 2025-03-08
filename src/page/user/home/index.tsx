@@ -1,5 +1,5 @@
-import { useRef, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useRef, useState, useEffect } from 'react'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { BsChevronLeft, BsChevronRight } from 'react-icons/bs'
 import { FaWheelchair, FaSignLanguage, FaUniversalAccess } from 'react-icons/fa'
 import MainLayout from '@/components/layouts/MainLayout'
@@ -8,24 +8,41 @@ import { getYoutubeVideoId } from '@/hooks/useVideos'
 import { useSuccessStories } from '@/hooks/useSuccessStories'
 import { motion } from 'framer-motion';
 import AOS from 'aos';
-import { useEffect } from 'react';
 
 export default function HomePage() {
-  useEffect(() => {
-    AOS.init({
-      duration: 1000, // Durasi animasi 1 detik
-      once: true, // Animasi hanya berjalan sekali
-      easing: 'ease-in-out', // Transisi lebih natural
-      delay: 100, // Sedikit delay agar efek muncul lebih smooth
-    });
-  }, []);
   const navigate = useNavigate();
+  const location = useLocation();
   const videoScrollRef = useRef<HTMLDivElement>(null)
   const [searchTerm, setSearchTerm] = useState('');
   const [locationTerm, setLocationTerm] = useState('');
 
   const { videos, loading } = useVideos()
   const { stories, loading: storiesLoading } = useSuccessStories()
+
+  // Effect untuk mengecek parameter code
+  useEffect(() => {
+    const params = new URLSearchParams(location.search);
+    const code = params.get('code');
+    
+    if (code) {
+      // Redirect ke halaman login
+      navigate('/login', { 
+        state: { 
+          message: 'Akun berhasil diaktivasi! Silakan login untuk melanjutkan.' 
+        }
+      });
+    }
+  }, [location, navigate]);
+
+  // Effect untuk AOS tetap sama
+  useEffect(() => {
+    AOS.init({
+      duration: 1000,
+      once: true,
+      easing: 'ease-in-out',
+      delay: 100,
+    });
+  }, []);
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();

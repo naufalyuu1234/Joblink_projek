@@ -54,7 +54,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       options: {
         data: {
           full_name: fullName,
-        }
+        },
+        emailRedirectTo: 'https://joblink-projekk.vercel.app'
       }
     })
 
