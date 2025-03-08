@@ -9,6 +9,8 @@ import { useNavigate } from 'react-router-dom'
 interface Message {
   role: 'user' | 'assistant';
   content: string;
+  isTyping?: boolean;
+  isError?: boolean;
 }
 
 interface Recommendation {
@@ -47,23 +49,77 @@ export default function AssistantPage() {
     setInputMessage('');
     setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
 
+    setMessages(prev => [...prev, { 
+      role: 'assistant', 
+      content: '...', 
+      isTyping: true 
+    }]);
+
     try {
       console.log('Sending jobs data to AI:', jobs); // Debug log
       const response = await generateResponse(userMessage, jobs);
       if (response) {
-        setMessages(prev => [...prev, { role: 'assistant', content: response.response }]);
+        setMessages(prev => {
+          const newMessages = prev.filter(msg => !msg.isTyping);
+          return [...newMessages, { 
+            role: 'assistant', 
+            content: response.response 
+          }];
+        });
         setRecommendations(response.recommendations || []);
       }
     } catch (error) {
       console.error('Error:', error);
-      setMessages(prev => [...prev, { 
-        role: 'assistant', 
-        content: 'Maaf, terjadi kesalahan dalam memproses permintaan Anda.' 
-      }]);
+      setMessages(prev => {
+        const newMessages = prev.filter(msg => !msg.isTyping);
+        return [...newMessages, { 
+          role: 'assistant', 
+          content: 'Maaf, terjadi kesalahan dalam memproses permintaan Anda. Silakan coba lagi.', 
+          isError: true 
+        }];
+      });
     }
   };
 
   const navigate = useNavigate();
+
+  const renderMessage = (message: Message, index: number) => (
+    <div key={index} className={`flex items-start gap-3 ${message.role === 'user' ? 'justify-end' : ''}`}>
+      {message.role === 'assistant' && (
+        <div className="w-8 h-8 bg-gray-100 dark:bg-[#2a2c47] rounded-full flex-shrink-0 flex items-center justify-center">
+          <FaRobot className="w-4 h-4 text-gray-600 dark:text-white" />
+        </div>
+      )}
+      <div className={`flex-1 max-w-[80%] ${message.role === 'user' ? 'ml-auto' : ''}`}>
+        <div className={`rounded-2xl p-4 ${
+          message.role === 'user' 
+            ? 'bg-blue-50 dark:bg-blue-600/20' 
+            : message.isError 
+              ? 'bg-red-50 dark:bg-red-900/20' 
+              : 'bg-gray-100 dark:bg-[#2a2c47]'
+        }`}>
+          {message.isTyping ? (
+            <div className="flex space-x-2">
+              <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></div>
+              <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></div>
+              <div className="w-2 h-2 bg-gray-500 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></div>
+            </div>
+          ) : (
+            <p className={`${
+              message.isError ? 'text-red-600 dark:text-red-400' : 'text-gray-800 dark:text-gray-200'
+            }`}>
+              {message.content}
+            </p>
+          )}
+        </div>
+      </div>
+      {message.role === 'user' && (
+        <div className="w-8 h-8 bg-gray-100 dark:bg-[#2a2c47] rounded-full flex-shrink-0 flex items-center justify-center">
+          <FaUser className="w-4 h-4 text-gray-600 dark:text-gray-300" />
+        </div>
+      )}
+    </div>
+  );
 
   return (
     <MainLayout>
@@ -85,29 +141,7 @@ export default function AssistantPage() {
             <div className="p-4 h-[600px] flex flex-col">
               {/* Messages Area */}
               <div className="flex-1 overflow-y-auto space-y-6 mb-4">
-                {messages.map((message, index) => (
-                  <div key={index} className={`flex items-start gap-3 ${message.role === 'user' ? 'justify-end' : ''}`}>
-                    {message.role === 'assistant' && (
-                      <div className="w-8 h-8 bg-gray-100 dark:bg-[#2a2c47] rounded-full flex-shrink-0 flex items-center justify-center">
-                        <FaRobot className="w-4 h-4 text-gray-600 dark:text-white" />
-                      </div>
-                    )}
-                    <div className={`flex-1 max-w-[80%] ${message.role === 'user' ? 'ml-auto' : ''}`}>
-                      <div className={`rounded-2xl p-4 ${
-                        message.role === 'user' 
-                          ? 'bg-blue-50 dark:bg-blue-600/20' 
-                          : 'bg-gray-100 dark:bg-[#2a2c47]'
-                      }`}>
-                        <p className="text-gray-800 dark:text-gray-200">{message.content}</p>
-                      </div>
-                    </div>
-                    {message.role === 'user' && (
-                      <div className="w-8 h-8 bg-gray-100 dark:bg-[#2a2c47] rounded-full flex-shrink-0 flex items-center justify-center">
-                        <FaUser className="w-4 h-4 text-gray-600 dark:text-gray-300" />
-                      </div>
-                    )}
-                  </div>
-                ))}
+                {messages.map((message, index) => renderMessage(message, index))}
                 <div ref={messagesEndRef} />
               </div>
 
