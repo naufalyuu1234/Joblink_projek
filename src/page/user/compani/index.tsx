@@ -58,55 +58,55 @@ export default function Company() {
     'Mantap Mart': {
       logo: 'https://placehold.co/200x200?text=MM',
       rating: 4.2,
-      employeeCount: '500+',
+      employeeCount: '500+ Disabilitas',
       industry: 'Retail'
     },
     'Hotel Harmoni': {
       logo: 'https://placehold.co/200x200?text=HH',
       rating: 4.5,
-      employeeCount: '300+',
+      employeeCount: '300+ Disabilitas',
       industry: 'Perhotelan'
     },
     'CustomerCare Indonesia': {
       logo: 'https://placehold.co/200x200?text=CCI',
       rating: 4.3,
-      employeeCount: '1000+',
+      employeeCount: '1000+ Disabilitas',
       industry: 'Customer Service'
     },
     'SugarTaylor': {
       logo: 'https://placehold.co/200x200?text=ST',
       rating: 4.4,
-      employeeCount: '100+',
+      employeeCount: '100+ Disabilitas',
       industry: 'Fashion'
     },
     'SafeGuard Security': {
       logo: 'https://placehold.co/200x200?text=SGS',
       rating: 4.1,
-      employeeCount: '750+',
+      employeeCount: '750+ Disabilitas',
       industry: 'Keamanan'
     },
     'GreenClean Facility Services': {
       logo: 'https://placehold.co/200x200?text=GC',
       rating: 4.0,
-      employeeCount: '200+',
+      employeeCount: '200+ Disabilitas',
       industry: 'Facility Management'
     },
     'Inclusive Support Center': {
       logo: 'https://placehold.co/200x200?text=ISC',
       rating: 4.6,
-      employeeCount: '400+',
+      employeeCount: '400+ Disabilitas',
       industry: 'Customer Service'
     },
     'Resto Aksesibel': {
       logo: 'https://placehold.co/200x200?text=RA',
       rating: 4.3,
-      employeeCount: '150+',
+      employeeCount: '150+ Disabilitas',
       industry: 'Food & Beverage'
     },
     'Kopi Inklusif': {
       logo: 'https://placehold.co/200x200?text=KI',
       rating: 4.4,
-      employeeCount: '80+',
+      employeeCount: '80+ Disabilitas',
       industry: 'Food & Beverage'
     }
   } as const;
