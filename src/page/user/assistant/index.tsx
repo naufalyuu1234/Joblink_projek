@@ -4,6 +4,7 @@ import { BsMic } from 'react-icons/bs'
 import { FaRobot, FaUser } from 'react-icons/fa'
 import { useOpenAI } from '@/hooks/useOpenAI'
 import { useJobs } from '@/hooks/useJobs'
+import { useNavigate } from 'react-router-dom'
 
 interface Message {
   role: 'user' | 'assistant';
@@ -61,6 +62,8 @@ export default function AssistantPage() {
       }]);
     }
   };
+
+  const navigate = useNavigate();
 
   return (
     <MainLayout>
@@ -140,7 +143,8 @@ export default function AssistantPage() {
             <h2 className="font-semibold mb-3 text-gray-900 dark:text-white">Rekomendasi Pekerjaan Inklusif</h2>
             <div className="space-y-3">
               {recommendations.map((job) => (
-                <div 
+                <div
+                  onClick={() => navigate(`/detail/${job.id}`)}
                   key={job.id}
                   className="p-3 bg-gray-50 dark:bg-[#2a2c47] rounded-lg hover:bg-gray-100 dark:hover:bg-[#31334d] transition-colors cursor-pointer"
                 >
