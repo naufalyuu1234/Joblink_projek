@@ -58,7 +58,6 @@ const JobDetail = () => {
     responsibilities = null,
     benefits = null,
     company_description = '',
-    work_hours = ''
   } = job || {};
 
   return (
