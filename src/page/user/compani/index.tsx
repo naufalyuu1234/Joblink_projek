@@ -1,170 +1,230 @@
 import { useEffect } from 'react';
 import MainLayout from '@/components/layouts/MainLayout';
+import { MapPin, Users, Building, Star, Briefcase } from 'lucide-react';
 import AOS from 'aos';
 import 'aos/dist/aos.css';
+import { useJobs } from '@/hooks/useJobs';
+import { Link } from 'react-router-dom';
+
+interface CompanyInfo {
+  name: string;
+  jobCount: number;
+  disabilitySupport: string[];
+  location: string;
+  latestJobs: {
+    id: string;
+    title: string;
+    type: string;
+  }[];
+}
 
 export default function Company() {
-    useEffect(() => {
-        AOS.init({
-            duration: 800,
-            once: true,
-            easing: 'ease-in-out',
-        });
-    }, []);
+  const { jobs, loading } = useJobs();
 
-    const teamMembers = [
-        { 
-            name: "John Doe", 
-            role: "CEO", 
-            image: "/images/team1.jpg" 
-        },
-        { 
-            name: "Jane Smith", 
-            role: "CTO", 
-            image: "/images/team2.jpg" 
-        },
-        { 
-            name: "Alex Johnson", 
-            role: "HR Manager", 
-            image: "/images/team3.jpg" 
-        }
+  useEffect(() => {
+    AOS.init({
+      duration: 800,
+      once: true,
+    });
+  }, []);
+
+  // Mengorganisir data jobs berdasarkan perusahaan
+  const companyData = jobs.reduce<Record<string, CompanyInfo>>((acc, job) => {
+    if (!acc[job.company]) {
+      acc[job.company] = {
+        name: job.company,
+        jobCount: 0,
+        disabilitySupport: [],
+        location: job.location,
+        latestJobs: []
+      };
+    }
+
+    acc[job.company].jobCount += 1;
+    acc[job.company].disabilitySupport = [
+      ...new Set([...acc[job.company].disabilitySupport, ...job.disability_support])
     ];
+    acc[job.company].latestJobs.push({
+      id: job.id,
+      title: job.title,
+      type: job.type
+    });
 
-    const testimonials = [
-        {
-            quote: "JobLink helped me find a job that suits my abilities!",
-            author: "Sarah"
-        },
-        {
-            quote: "Great platform for inclusive job opportunities!",
-            author: "Michael"
-        }
-    ];
+    return acc;
+  }, {});
 
-    return (
-        <MainLayout>
-            <div className="max-w-7xl mx-auto px-6 py-12">
-                {/* Hero Section */}
-                <section 
-                    className="relative bg-gradient-to-br from-[#22243b] to-[#2c3049] text-white overflow-hidden"
-                    data-aos="fade-up"
-                >
-                    <div className="container mx-auto px-4 py-16 md:py-24 grid md:grid-cols-2 gap-8 items-center">
-                        <div className="space-y-6 text-center md:text-left z-10">
-                            <div className="flex items-center justify-center md:justify-start space-x-3">
-                                <h1 className="text-4xl md:text-5xl font-bold tracking-tight">
-                                    JobLink
-                                </h1>
-                            </div>
-                            <p className="text-xl md:text-2xl text-gray-300 max-w-xl mx-auto md:mx-0">
-                                Connecting people with opportunities for a better future.
-                            </p>
-                            <div className="flex justify-center md:justify-start space-x-4">
-                                <button className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
-                                    Find Jobs
-                                </button>
-                                <button className="bg-gray-700 hover:bg-gray-600 text-white font-semibold py-3 px-6 rounded-lg transition-colors">
-                                    Post a Job
-                                </button>
-                            </div>
-                        </div>
-                        
-                        <div className="hidden md:flex justify-center items-center relative">
-                            <div className="absolute w-72 h-72 bg-blue-500/20 rounded-full blur-3xl -top-12 right-0"></div>
-                            <img 
-                                src="/src/assets/6.png" 
-                                alt="JobLink Illustration" 
-                                className="relative z-10 max-w-full h-auto transform hover:scale-105 transition-transform duration-300"
-                            />
-                        </div>
+  // Data tambahan untuk setiap perusahaan (dummy data)
+  const companyExtraInfo = {
+    'Mantap Mart': {
+      logo: 'https://placehold.co/200x200?text=MM',
+      rating: 4.2,
+      employeeCount: '500+',
+      industry: 'Retail'
+    },
+    'Hotel Harmoni': {
+      logo: 'https://placehold.co/200x200?text=HH',
+      rating: 4.5,
+      employeeCount: '300+',
+      industry: 'Perhotelan'
+    },
+    'CustomerCare Indonesia': {
+      logo: 'https://placehold.co/200x200?text=CCI',
+      rating: 4.3,
+      employeeCount: '1000+',
+      industry: 'Customer Service'
+    },
+    'SugarTaylor': {
+      logo: 'https://placehold.co/200x200?text=ST',
+      rating: 4.4,
+      employeeCount: '100+',
+      industry: 'Fashion'
+    },
+    'SafeGuard Security': {
+      logo: 'https://placehold.co/200x200?text=SGS',
+      rating: 4.1,
+      employeeCount: '750+',
+      industry: 'Keamanan'
+    },
+    'GreenClean Facility Services': {
+      logo: 'https://placehold.co/200x200?text=GC',
+      rating: 4.0,
+      employeeCount: '200+',
+      industry: 'Facility Management'
+    },
+    'Inclusive Support Center': {
+      logo: 'https://placehold.co/200x200?text=ISC',
+      rating: 4.6,
+      employeeCount: '400+',
+      industry: 'Customer Service'
+    },
+    'Resto Aksesibel': {
+      logo: 'https://placehold.co/200x200?text=RA',
+      rating: 4.3,
+      employeeCount: '150+',
+      industry: 'Food & Beverage'
+    },
+    'Kopi Inklusif': {
+      logo: 'https://placehold.co/200x200?text=KI',
+      rating: 4.4,
+      employeeCount: '80+',
+      industry: 'Food & Beverage'
+    }
+  } as const;
+
+  return (
+    <MainLayout>
+      <div className="max-w-7xl mx-auto px-4 py-8">
+        <div className="text-center mb-12" data-aos="fade-up">
+          <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-4">
+            Perusahaan Ramah Disabilitas Terbaik
+          </h1>
+          <p className="text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
+            Temukan perusahaan-perusahaan terkemuka yang menyediakan lingkungan kerja inklusif, fasilitas yang mendukung, dan kesempatan berkarir yang setara bagi penyandang disabilitas
+          </p>
+        </div>
+
+        {loading ? (
+          <div className="grid grid-cols-1 gap-6" data-aos="fade-up">
+            {[1, 2, 3].map((i) => (
+              <div key={i} className="bg-white dark:bg-[#22243b] rounded-lg shadow-md p-6 animate-pulse">
+                <div className="flex gap-6">
+                  <div className="w-24 h-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
+                  <div className="flex-1 space-y-4">
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/4"></div>
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+                    <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-3/4"></div>
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 gap-6" data-aos="fade-up">
+            {Object.entries(companyData).map(([companyName, data]) => (
+              <div 
+                key={companyName}
+                className="bg-white dark:bg-[#22243b] rounded-lg shadow-md hover:shadow-lg transition-shadow p-6"
+              >
+                <div className="flex flex-col md:flex-row items-start gap-6">
+                  <div className="w-24 h-24 flex-shrink-0">
+                    <img 
+                      src={companyExtraInfo[companyName as keyof typeof companyExtraInfo]?.logo} 
+                      alt={companyName}
+                      className="w-full h-full object-contain rounded-lg"
+                    />
+                  </div>
+
+                  <div className="flex-1">
+                    <div className="flex items-start justify-between mb-2">
+                      <div>
+                        <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                          {companyName}
+                        </h2>
+                        <p className="text-gray-600 dark:text-gray-300 flex items-center gap-2">
+                          <Building size={16} />
+                          {companyExtraInfo[companyName as keyof typeof companyExtraInfo]?.industry}
+                        </p>
+                      </div>
+                      <div className="flex items-center gap-1">
+                        <Star className="w-5 h-5 text-yellow-400 fill-current" />
+                        <span className="text-gray-700 dark:text-gray-300">
+                          {companyExtraInfo[companyName as keyof typeof companyExtraInfo]?.rating}
+                        </span>
+                      </div>
                     </div>
-                </section>
-                
-                {/* About Us */}
-                <section 
-                    className="mt-16 text-center"
-                    data-aos="fade-up"
-                >
-                    <h2 className="text-3xl font-bold">About Us</h2>
-                    <p className="mt-4 text-gray-600 max-w-2xl mx-auto">
-                        JobLink is dedicated to helping individuals, including those with disabilities, find meaningful employment through innovative and inclusive job matching.
-                    </p>
-                </section>
-                
-                {/* Our Team */}
-                <section 
-                    className="mt-16"
-                    data-aos="fade-up"
-                >
-                    <h2 className="text-3xl font-bold text-center">Meet Our Team</h2>
-                    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mt-6">
-                        {teamMembers.map((member, index) => (
-                            <div 
-                                key={member.name} 
-                                className="bg-white p-6 rounded-lg shadow-md text-center transition-all hover:shadow-xl"
-                                data-aos="zoom-in"
-                                data-aos-delay={index * 100}
-                            >
-                                <img 
-                                    src={member.image} 
-                                    alt={member.name} 
-                                    className="mx-auto w-24 h-24 rounded-full object-cover" 
-                                />
-                                <h3 className="mt-4 font-semibold">{member.name}</h3>
-                                <p className="text-sm text-gray-500">{member.role}</p>
-                            </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+                      <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
+                        <MapPin size={16} />
+                        {data.location}
+                      </div>
+                      <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
+                        <Users size={16} />
+                        {companyExtraInfo[companyName as keyof typeof companyExtraInfo]?.employeeCount} Karyawan
+                      </div>
+                      <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
+                        <Briefcase size={16} />
+                        {data.jobCount} Lowongan Terbuka
+                      </div>
+                    </div>
+
+                    <div className="mb-4">
+                      <h3 className="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Lowongan Terbaru:</h3>
+                      <div className="flex flex-wrap gap-2">
+                        {data.latestJobs.map(job => (
+                          <Link 
+                            key={job.id}
+                            to={`/detail/${job.id}`}
+                            className="text-sm px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+                          >
+                            {job.title}
+                          </Link>
                         ))}
+                      </div>
                     </div>
-                </section>
-                
-                {/* Careers */}
-                <section 
-                    className="mt-16 text-center bg-blue-50 py-16 rounded-lg"
-                    data-aos="fade-up"
-                >
-                    <h2 className="text-3xl font-bold text-blue-900">Join Our Team</h2>
-                    <p className="mt-4 text-gray-700 max-w-xl mx-auto">
-                        Explore exciting job opportunities and build your future with us. We're committed to creating an inclusive workplace.
-                    </p>
-                    <button className="mt-6 bg-blue-600 text-white px-8 py-3 rounded-lg shadow-md hover:bg-blue-700 transition-colors">
-                        See Open Positions
-                    </button>
-                </section>
-                
-                {/* Testimonials */}
-                <section 
-                    className="mt-16"
-                    data-aos="fade-up"
-                >
-                    <h2 className="text-3xl font-bold text-center">What People Say</h2>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
-                        {testimonials.map((testimonial, index) => (
-                            <div 
-                                key={testimonial.author} 
-                                className="bg-white p-6 rounded-lg shadow-md"
-                                data-aos="flip-left"
-                                data-aos-delay={index * 100}
-                            >
-                                <p className="text-gray-600 italic">"{testimonial.quote}"</p>
-                                <h4 className="mt-4 font-semibold text-right">- {testimonial.author}</h4>
-                            </div>
-                        ))}
+
+                    <div className="flex flex-wrap gap-2">
+                      {data.disabilitySupport.slice(0, 3).map((support, index) => (
+                        <span 
+                          key={index}
+                          className="px-3 py-1 text-sm bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-300 rounded-full"
+                        >
+                          {support}
+                        </span>
+                      ))}
+                      {data.disabilitySupport.length > 3 && (
+                        <span className="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded-full">
+                          +{data.disabilitySupport.length - 3} lainnya
+                        </span>
+                      )}
                     </div>
-                </section>
-                
-                {/* Contact Us */}
-                <section 
-                    className="mt-16 text-center bg-gradient-to-br from-blue-100 to-blue-200 p-10 rounded-lg"
-                    data-aos="zoom-in"
-                >
-                    <h2 className="text-3xl font-bold text-blue-900">Get in Touch</h2>
-                    <p className="mt-4 text-gray-700">Have questions? We're here to help!</p>
-                    <div className="mt-6 space-y-2">
-                        <p className="text-gray-800 font-semibold">Email: support@joblink.com</p>
-                        <p className="text-gray-800 font-semibold">Phone: +62 812-3456-7890</p>
-                    </div>
-                </section>
-            </div>
-        </MainLayout>
-    );
+                  </div>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </MainLayout>
+  );
 }
